@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.action.extension" value="action,do" />
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true" />
+
+
+	<package name="default" namespace="/" extends="json-default">
+
+		<interceptors>
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="myStack" />
+		<global-results>
+			<result name="login">/index.jsp</result>
+			<result name="input">/WEB-INF/error.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping result="input" exception="java.lang.Exception" />
+		</global-exception-mappings>
+
+		<action name="default">
+			<result>/index.jsp</result>
+		</action>
+
+		<action name="*!*" class="com.action.{1}Action" method="{2}">
+			<result name="login" type="dispatcher">/index.jsp</result>
+			<result name="main" type="dispatcher">/main.jsp</result>
+			<result name="user" type="redirectAction">User!show.do</result>
+			<result name="showAll" type="redirectAction">Diary!list.do</result>
+			<result type="json">
+				<param name="root">root</param>
+				<param name="contentType">text/json</param>
+			</result>
+		</action>
+
+	</package>
+
+
+</struts>    
